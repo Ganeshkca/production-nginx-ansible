@@ -1,3 +1,4 @@
+---
 name: Ansible CI Pipeline
 'on':
     push:
@@ -6,7 +7,7 @@ name: Ansible CI Pipeline
     pull_request:
         branches:
             - main
-            
+
 jobs:
     validate-ansible:
         name: Validate Ansible Project
@@ -17,27 +18,22 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
-                python-version: '3.x'
-            
+                  python-version: '3.x'
 
             - name: Install Ansible tools
               run: |
                 python -m pip install --upgrade pip
                 pip install ansible ansible-lint yamllint
-            
-            
+
             - name: Check YAML formating
               run: yamllint -d relaxed .
-              
+
             - name: Run Ansible Lint
               run: ansible-lint site.yml
 
 
             - name: Check Ansible syntax
               run: ansible-playbook -i inventory/hosts site.yml --syntax-check
-            
-              
