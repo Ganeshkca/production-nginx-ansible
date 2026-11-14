@@ -1,0 +1,17 @@
+server{
+   listen {{ nginx_port }} default_server;
+   listen [::]:{{ nginx_port }} default_server;
+
+   root {{ nginx_document_root }};
+   index index.html;
+
+   server_name _;
+
+   add_header X-Content-Type-Options "nosniff" always;
+   add_header X-Frame-Options "SAMORIGIN" always;
+   add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+   location / {
+       try_files $uri $uri/ =404;
+   }
+}

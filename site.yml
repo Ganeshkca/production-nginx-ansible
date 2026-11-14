@@ -1,0 +1,8 @@
+---
+- name: Deploy production Nginx website
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  roles:
+    - nginx
