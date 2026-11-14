@@ -21,7 +21,7 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
-                  python-version: '3.x'
+                  python-version: '3.14'
 
             - name: Install Ansible tools
               run: |
@@ -30,6 +30,11 @@ jobs:
 
             - name: Check YAML formating
               run: yamllint -d relaxed .
+
+            - name: Install Ansible Lint
+              run: |
+                python -m pip install --upgrade pip
+                pip -m intall ansible-lint
 
             - name: Run Ansible Lint
               run: ansible-lint site.yml
