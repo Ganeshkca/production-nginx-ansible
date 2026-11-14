@@ -1,7 +1,7 @@
 ---
 - name: Update APT package cache
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
 
 - name: Install Nginx
@@ -11,11 +11,11 @@
 
 - name: Deploy Nginx server configuration
   ansible.builtin.template:
-     src: default.conf.j2
-     dest: /etc/nginx/sites-available/default
-     owner: root
-     group: root
-     mode: '0644'
+    src: default.conf.j2
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: '0644'
   notify: Reload Nginx
 
 - name: Validate Nginx configuration
@@ -26,7 +26,7 @@
   ansible.builtin.service:
     name: "{{ nginx_service }}"
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Deploy custom website
   ansible.builtin.template:
@@ -43,12 +43,12 @@
     method: GET
     status_code: 200
     return_content: true
-  register: website_health
+  register: nginx_website_health
 
-- name: verify website content
+- name: Verify website content
   ansible.builtin.assert:
     that:
-      - website_title in website_health.content
-      - website_message in website_health.content
+      - website_title in nginx_website_health.content
+      - website_message in nginx_website_health.content
     success_msg: "website health check passed"
     fail_msg: "website health check failed"

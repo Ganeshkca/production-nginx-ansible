@@ -1,8 +1,8 @@
 ---
-- nginx_name: Deploy production Nginx website
-  nginx_hosts: webservers
-  nginx_become: true
+- name: Deploy production Nginx website
+  hosts: webservers
+  become: true
   gather_facts: true
 
-  nginx_roles:
+  roles:
     - nginx
