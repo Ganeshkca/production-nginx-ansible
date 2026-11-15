@@ -1,0 +1,37 @@
+---
+name: Ansible CD Deployment
+
+'on':
+  workflow_dispatch:
+    inputs:
+      confirm_deployment:
+        description: "Type 'deploy' to confirm deployment"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: github.ref =='refs/heads/main' && inputs.confirm_deployment =='deploy'
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy Nginx with Ansible
+        env:
+          ANSIBLE_BECOME_PASSWORD: ${{ secrets.ANSIBLE_BECOME_PASSWORD }}
+        run: |
+                set -euo  pipfail
+                install -m 600 /dev/null "$RUNNER_TEMP/ANSIBLE_BECOME_PASSWORD"
+                trap 'rm -f' "$RUNNER_TEMP/ANSIBLE_BECOME_PASSWORD" EXIT
+                printf '%s' "$ANSIBLE_BECOME_PASSWORD"
+                > "$RUNNER_TEMP/ANSIBLE_BECOME_PASSWORD"
+                ansible-playbook \
+                  -i inventory/hosts.ini \
+                  site.yml \
+                  --private-key "$HOME/.ssh/ansible_deploy" \
+                  --become-password-file "$RUNNER_TEMP/become_password"
