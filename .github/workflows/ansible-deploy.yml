@@ -26,10 +26,10 @@ jobs:
           ANSIBLE_BECOME_PASSWORD: ${{ secrets.ANSIBLE_BECOME_PASSWORD }}
         run: |
                 set -euo  pipefail
-                install -m 600 /dev/null "$RUNNER_TEMP/ANSIBLE_BECOME_PASSWORD"
-                trap 'rm -f' "$RUNNER_TEMP/ANSIBLE_BECOME_PASSWORD" EXIT
-                printf '%s' "$ANSIBLE_BECOME_PASSWORD"
-                > "$RUNNER_TEMP/ANSIBLE_BECOME_PASSWORD"
+                install -m 600 /dev/null "$RUNNER_TEMP/become_password"
+                trap 'rm -f "$RUNNER_TEMP/become_password"' EXIT
+                printf '%s' "$ANSIBLE_BECOME_PASSWORD" \
+                  > "$RUNNER_TEMP/become_password"
                 ansible-playbook \
                   -i inventory/hosts.ini \
                   site.yml \
