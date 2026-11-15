@@ -25,7 +25,7 @@ jobs:
         env:
           ANSIBLE_BECOME_PASSWORD: ${{ secrets.ANSIBLE_BECOME_PASSWORD }}
         run: |
-                set -euo  pipfail
+                set -euo  pipefail
                 install -m 600 /dev/null "$RUNNER_TEMP/ANSIBLE_BECOME_PASSWORD"
                 trap 'rm -f' "$RUNNER_TEMP/ANSIBLE_BECOME_PASSWORD" EXIT
                 printf '%s' "$ANSIBLE_BECOME_PASSWORD"
